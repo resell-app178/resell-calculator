@@ -83,11 +83,29 @@
         .bg-red { background-color: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
         
         .risk-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); padding: 12px; border-radius: 10px; margin-top: 12px; font-size: 0.78rem; color: var(--accent-red); display: none; line-height: 1.4; }
+
+        /* UPOZORNENIE PRE POZNÁMKU V PLATBE */
+        .notice-box {
+          background-color: rgba(255, 170, 0, 0.15);
+          border: 1px solid #ffaa00;
+          color: #ffdd80;
+          border-radius: 10px;
+          padding: 14px;
+          font-size: 0.82rem;
+          line-height: 1.4;
+          margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 
 <div class="wrapper">
+
+    <!-- UPOZORNENIE NA E-MAIL DO POZNÁMKY PLATBY -->
+    <div class="notice-box">
+      ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem aktivačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
+    </div>
+
     <div class="tab-nav">
         <button class="tab-btn active" onclick="switchMainTab('chinaTab', this)">1. Čína / Multi-Item Import</button>
         <button class="tab-btn" onclick="switchMainTab('vintedTab', this)">2. Vinted / Local Flip</button>
