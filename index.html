@@ -22,6 +22,124 @@
         body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding: 20px 10px; display: flex; justify-content: center; }
         .wrapper { width: 100%; max-width: 1200px; }
         
+        /* PAYWALL STYLES */
+        #paywall-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 85vh;
+        }
+
+        .paywall-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .pw-card {
+            background-color: var(--bg-panel);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .pw-title {
+            color: var(--accent-cyan);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .price {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        .iban-box {
+            background-color: var(--bg-main);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 1px;
+            margin: 15px 0 5px 0;
+            word-break: break-all;
+        }
+
+        .sub-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .notice-box {
+            background-color: rgba(255, 170, 0, 0.15);
+            border: 1px solid #ffaa00;
+            color: #ffdd80;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            text-align: left;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .qr-container {
+            margin: 15px 0;
+        }
+
+        .qr-img {
+            width: 180px;
+            height: 180px;
+            background: #fff;
+            padding: 6px;
+            border-radius: 8px;
+        }
+
+        .pw-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-main);
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .pw-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-cyan);
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .pw-btn:hover {
+            background-color: #22d3ee;
+        }
+
+        /* MAIN APP STYLES (PRIPOJENÉ) */
+        #main-app {
+            display: none;
+        }
+
         .tab-nav { display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; }
         .tab-btn { background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-muted); padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
         .tab-btn:hover { color: #fff; border-color: var(--accent-cyan); }
@@ -83,158 +201,217 @@
         .bg-red { background-color: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
         
         .risk-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); padding: 12px; border-radius: 10px; margin-top: 12px; font-size: 0.78rem; color: var(--accent-red); display: none; line-height: 1.4; }
-
-        /* UPOZORNENIE PRE POZNÁMKU V PLATBE */
-        .notice-box {
-          background-color: rgba(255, 170, 0, 0.15);
-          border: 1px solid #ffaa00;
-          color: #ffdd80;
-          border-radius: 10px;
-          padding: 14px;
-          font-size: 0.82rem;
-          line-height: 1.4;
-          margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 
 <div class="wrapper">
 
-    <!-- UPOZORNENIE NA E-MAIL DO POZNÁMKY PLATBY -->
-    <div class="notice-box">
-      ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem aktivačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
-    </div>
+    <!-- 1. PAYWALL OBRAZOVKA (UZAMKNUTIE) -->
+    <div id="paywall-screen">
+        <div class="paywall-container">
 
-    <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchMainTab('chinaTab', this)">1. Čína / Multi-Item Import</button>
-        <button class="tab-btn" onclick="switchMainTab('vintedTab', this)">2. Vinted / Local Flip</button>
-    </div>
-
-    <!-- TAB 1: CHINA MULTI-ITEM -->
-    <div id="chinaTab" class="tab-content active">
-        <div class="dashboard">
-            <div class="panel">
-                <div class="section-title">
-                    <span>1. Predmety v Haule</span>
-                    <button class="btn-add" onclick="addNewItem()">+ Nový Predmet</button>
+            <div class="pw-card">
+                <div class="pw-title">CENNÍK PRÍSTUPOV</div>
+                <div class="price-row">
+                    <span>Doživotný prístup (LIFETIME)</span>
+                    <span class="price">4.99 €</span>
                 </div>
-
-                <div class="item-tabs-bar" id="itemTabsBar"></div>
-                <div id="itemContentsContainer"></div>
-
-                <div class="section-title">2. Agent & Logistika Balíka</div>
-                <div class="grid-2">
-                    <div class="group">
-                        <label>Agent Platforma</label>
-                        <select id="c1_agent" onchange="calcChina()">
-                            <option value="litbuy">LitBuy (3.5% TopUp)</option>
-                            <option value="opbuy">OPBuy (3.0% TopUp)</option>
-                            <option value="acbuy">ACBuy (4.0% TopUp)</option>
-                        </select>
-                    </div>
-                    <div class="group">
-                        <label>Cieľová Krajina (Doručenie)</label>
-                        <select id="c1_country" onchange="calcChina()">
-                            <option value="SK">Slovensko (€13.8/kg)</option>
-                            <option value="CZ">Česko (€13.5/kg)</option>
-                            <option value="DE">Nemecko (€12.9/kg)</option>
-                            <option value="PL">Poľsko (€13.0/kg)</option>
-                            <option value="HU">Maďarsko (€14.1/kg)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="checkbox-grid">
-                    <div class="checkbox-item"><input type="checkbox" id="c1_cornerProtect" onchange="calcChina()"><label for="c1_cornerProtect">+ Kartónové rohy (+1.5€)</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="c1_bubbleWrap" onchange="calcChina()"><label for="c1_bubbleWrap">+ Bublinková fólia (+2€)</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="c1_moistureBag" onchange="calcChina()"><label for="c1_moistureBag">+ Vodotesný obal (+1€)</label></div>
-                    <div class="checkbox-item"><input type="checkbox" id="c1_insurance" checked onchange="calcChina()"><label for="c1_insurance">+ Poistenie balíka (3% z ceny)</label></div>
-                </div>
-
-                <div class="section-title">3. Predajná Platforma</div>
-                <div class="group">
-                    <label>Kde budeš veci predávať?</label>
-                    <select id="c1_platform" onchange="calcChina()">
-                        <option value="vinted">Vinted / Osobne (0% poplatok)</option>
-                        <option value="shopify">Shopify Store (2.9% + 0.30€)</option>
-                        <option value="ebay">eBay (12.8% + 0.35€)</option>
-                        <option value="stockx">StockX (12%)</option>
-                    </select>
+                <div class="price-row">
+                    <span>VIP Balík (Prístup + Discord)</span>
+                    <span class="price">9.99 €</span>
                 </div>
             </div>
 
-            <!-- RESULT PANEL -->
-            <div class="panel results-panel">
-                <div class="section-title">Celkový Prehľad Haulu</div>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="title">Čistý Zisk</div>
-                        <div id="c1_netProfit" class="value green">0.00 €</div>
+            <div class="pw-card">
+                <div class="pw-title">Platba prevodom / QR kódom</div>
+                <div class="sub-text">Po zaplatení ti príde aktivačný kód na e-mail / do správy.</div>
+
+                <div class="notice-box">
+                    ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem aktivačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
+                </div>
+
+                <div class="iban-box">SK55 1100 0000 0029 7011 1093</div>
+                <div class="sub-text">Meno príjemcu: <b>Patrik Šuľaj</b></div>
+
+                <div class="qr-container">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=SK5511000000002970111093" class="qr-img" alt="Platobný QR kód">
+                </div>
+            </div>
+
+            <div class="pw-card">
+                <div class="sub-text" style="text-align: left; margin-bottom: 8px;">Máš už kód? Zadaj svoj e-mail a aktivačný kód.</div>
+                <input type="email" id="input-email" class="pw-input" placeholder="Tvoj E-mail">
+                <input type="text" id="input-code" class="pw-input" placeholder="Zadaj aktivačný kód">
+                <button class="pw-btn" onclick="verifyCode()">ODOMKNÚŤ KALKULAČKU</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 2. HLAVNÁ KALKULAČKA RESELL OS v4.1 -->
+    <div id="main-app">
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchMainTab('chinaTab', this)">1. Čína / Multi-Item Import</button>
+            <button class="tab-btn" onclick="switchMainTab('vintedTab', this)">2. Vinted / Local Flip</button>
+        </div>
+
+        <!-- TAB 1: CHINA MULTI-ITEM -->
+        <div id="chinaTab" class="tab-content active">
+            <div class="dashboard">
+                <div class="panel">
+                    <div class="section-title">
+                        <span>1. Predmety v Haule</span>
+                        <button class="btn-add" onclick="addNewItem()">+ Nový Predmet</button>
                     </div>
-                    <div class="metric-card">
-                        <div class="title">Celkový ROI</div>
-                        <div id="c1_roi" class="value purple">0%</div>
+
+                    <div class="item-tabs-bar" id="itemTabsBar"></div>
+                    <div id="itemContentsContainer"></div>
+
+                    <div class="section-title">2. Agent & Logistika Balíka</div>
+                    <div class="grid-2">
+                        <div class="group">
+                            <label>Agent Platforma</label>
+                            <select id="c1_agent" onchange="calcChina()">
+                                <option value="litbuy">LitBuy (3.5% TopUp)</option>
+                                <option value="opbuy">OPBuy (3.0% TopUp)</option>
+                                <option value="acbuy">ACBuy (4.0% TopUp)</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label>Cieľová Krajina (Doručenie)</label>
+                            <select id="c1_country" onchange="calcChina()">
+                                <option value="SK">Slovensko (€13.8/kg)</option>
+                                <option value="CZ">Česko (€13.5/kg)</option>
+                                <option value="DE">Nemecko (€12.9/kg)</option>
+                                <option value="PL">Poľsko (€13.0/kg)</option>
+                                <option value="HU">Maďarsko (€14.1/kg)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item"><input type="checkbox" id="c1_cornerProtect" onchange="calcChina()"><label for="c1_cornerProtect">+ Kartónové rohy (+1.5€)</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="c1_bubbleWrap" onchange="calcChina()"><label for="c1_bubbleWrap">+ Bublinková fólia (+2€)</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="c1_moistureBag" onchange="calcChina()"><label for="c1_moistureBag">+ Vodotesný obal (+1€)</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="c1_insurance" checked onchange="calcChina()"><label for="c1_insurance">+ Poistenie balíka (3% z ceny)</label></div>
+                    </div>
+
+                    <div class="section-title">3. Predajná Platforma</div>
+                    <div class="group">
+                        <label>Kde budeš veci predávať?</label>
+                        <select id="c1_platform" onchange="calcChina()">
+                            <option value="vinted">Vinted / Osobne (0% poplatok)</option>
+                            <option value="shopify">Shopify Store (2.9% + 0.30€)</option>
+                            <option value="ebay">eBay (12.8% + 0.35€)</option>
+                            <option value="stockx">StockX (12%)</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="breakdown">
-                    <div class="b-row"><span>Cena tovaru celkovo:</span><span id="c1_resProductEur">0.00 €</span></div>
-                    <div class="b-row"><span>Finálna váha balíka:</span><span id="c1_resChargedWeight">0 g</span></div>
-                    <div class="b-row"><span>Spoločné Poštovné (s doplatkami):</span><span id="c1_resChinaShip">0.00 €</span></div>
-                    <div class="b-row"><span>Poplatky & Balenie:</span><span id="c1_resPackFees">0.00 €</span></div>
-                    <div class="b-row" style="font-weight: bold; margin-top: 6px; color: #fff;"><span>Celkové Náklady (Nákup):</span><span id="c1_resTotalCost">0.00 €</span></div>
-                    <div class="b-row green" style="font-weight: bold;"><span>Plánovaná Tržba (Predaj):</span><span id="c1_resTotalSell">0.00 €</span></div>
-                    <div class="b-row purple" style="font-weight: bold; margin-top: 4px;"><span>Min. Predajná Cena (Break-Even):</span><span id="c1_resBreakEven">0.00 €</span></div>
+                <!-- RESULT PANEL -->
+                <div class="panel results-panel">
+                    <div class="section-title">Celkový Prehľad Haulu</div>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="title">Čistý Zisk</div>
+                            <div id="c1_netProfit" class="value green">0.00 €</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="title">Celkový ROI</div>
+                            <div id="c1_roi" class="value purple">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="breakdown">
+                        <div class="b-row"><span>Cena tovaru celkovo:</span><span id="c1_resProductEur">0.00 €</span></div>
+                        <div class="b-row"><span>Finálna váha balíka:</span><span id="c1_resChargedWeight">0 g</span></div>
+                        <div class="b-row"><span>Spoločné Poštovné (s doplatkami):</span><span id="c1_resChinaShip">0.00 €</span></div>
+                        <div class="b-row"><span>Poplatky & Balenie:</span><span id="c1_resPackFees">0.00 €</span></div>
+                        <div class="b-row" style="font-weight: bold; margin-top: 6px; color: #fff;"><span>Celkové Náklady (Nákup):</span><span id="c1_resTotalCost">0.00 €</span></div>
+                        <div class="b-row green" style="font-weight: bold;"><span>Plánovaná Tržba (Predaj):</span><span id="c1_resTotalSell">0.00 €</span></div>
+                        <div class="b-row purple" style="font-weight: bold; margin-top: 4px;"><span>Min. Predajná Cena (Break-Even):</span><span id="c1_resBreakEven">0.00 €</span></div>
+                    </div>
+
+                    <div id="c1_status" class="status-pill bg-green">ZISKOVÝ HAUL</div>
+                    <div id="c1_riskBox" class="risk-box">⚠️ VAROVANIE: Balík presahuje 10kg alebo kombinuje rizikový tovar (parfém/batérie/luxus)! Hrozí vyššia šanca colnej kontroly alebo nútené rozdelenie do špeciálnych Sensitive liniek.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: VINTED FLIP -->
+        <div id="vintedTab" class="tab-content">
+            <div class="dashboard">
+                <div class="panel">
+                    <div class="section-title">Vinted / Lokálny Flip</div>
+                    <div class="grid-2">
+                        <div class="group"><label>Nákupná cena (€)</label><input type="number" id="v_buyPrice" value="45" oninput="calcVinted()"></div>
+                        <div class="group"><label>Pošta + Poplatky (€)</label><input type="number" id="v_buyFees" value="4.20" oninput="calcVinted()"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="group"><label>Oprava / Čistenie (€)</label><input type="number" id="v_renovation" value="3.00" oninput="calcVinted()"></div>
+                        <div class="group"><label>Predajná cena (€)</label><input type="number" id="v_sellPrice" value="95" oninput="calcVinted()"></div>
+                    </div>
+                    <div class="group">
+                        <label>Predajná Platforma</label>
+                        <select id="v_sellPlatform" onchange="calcVinted()">
+                            <option value="vinted">Vinted / Osobne (0%)</option>
+                            <option value="shopify">Shopify (2.9% + 0.30€)</option>
+                            <option value="ebay">eBay (12.8% + 0.35€)</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div id="c1_status" class="status-pill bg-green">ZISKOVÝ HAUL</div>
-                <div id="c1_riskBox" class="risk-box">⚠️ VAROVANIE: Balík presahuje 10kg alebo kombinuje rizikový tovar (parfém/batérie/luxus)! Hrozí vyššia šanca colnej kontroly alebo nútené rozdelenie do špeciálnych Sensitive liniek.</div>
+                <div class="panel results-panel">
+                    <div class="section-title">Výsledok Lokálneho Flipu</div>
+                    <div class="metrics-grid">
+                        <div class="metric-card"><div class="title">Čistý Zisk</div><div id="v_netProfit" class="value green">0.00 €</div></div>
+                        <div class="metric-card"><div class="title">ROI</div><div id="v_roi" class="value purple">0%</div></div>
+                    </div>
+                    <div class="breakdown">
+                        <div class="b-row"><span>Celkové Náklady:</span><span id="v_resTotalBuy">0.00 €</span></div>
+                        <div class="b-row"><span>Poplatok za predaj:</span><span id="v_resSellFee">0.00 €</span></div>
+                        <div class="b-row" style="font-weight: bold; color: #fff;"><span>Čistý Výnos:</span><span id="v_resNetYield">0.00 €</span></div>
+                    </div>
+                    <div id="v_status" class="status-pill bg-green">SUPER FLIP</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 2: VINTED FLIP -->
-    <div id="vintedTab" class="tab-content">
-        <div class="dashboard">
-            <div class="panel">
-                <div class="section-title">Vinted / Lokálny Flip</div>
-                <div class="grid-2">
-                    <div class="group"><label>Nákupná cena (€)</label><input type="number" id="v_buyPrice" value="45" oninput="calcVinted()"></div>
-                    <div class="group"><label>Pošta + Poplatky (€)</label><input type="number" id="v_buyFees" value="4.20" oninput="calcVinted()"></div>
-                </div>
-                <div class="grid-2">
-                    <div class="group"><label>Oprava / Čistenie (€)</label><input type="number" id="v_renovation" value="3.00" oninput="calcVinted()"></div>
-                    <div class="group"><label>Predajná cena (€)</label><input type="number" id="v_sellPrice" value="95" oninput="calcVinted()"></div>
-                </div>
-                <div class="group">
-                    <label>Predajná Platforma</label>
-                    <select id="v_sellPlatform" onchange="calcVinted()">
-                        <option value="vinted">Vinted / Osobne (0%)</option>
-                        <option value="shopify">Shopify (2.9% + 0.30€)</option>
-                        <option value="ebay">eBay (12.8% + 0.35€)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="panel results-panel">
-                <div class="section-title">Výsledok Lokálneho Flipu</div>
-                <div class="metrics-grid">
-                    <div class="metric-card"><div class="title">Čistý Zisk</div><div id="v_netProfit" class="value green">0.00 €</div></div>
-                    <div class="metric-card"><div class="title">ROI</div><div id="v_roi" class="value purple">0%</div></div>
-                </div>
-                <div class="breakdown">
-                    <div class="b-row"><span>Celkové Náklady:</span><span id="v_resTotalBuy">0.00 €</span></div>
-                    <div class="b-row"><span>Poplatok za predaj:</span><span id="v_resSellFee">0.00 €</span></div>
-                    <div class="b-row" style="font-weight: bold; color: #fff;"><span>Čistý Výnos:</span><span id="v_resNetYield">0.00 €</span></div>
-                </div>
-                <div id="v_status" class="status-pill bg-green">SUPER FLIP</div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
+// OVEROVANIE KÓDOV A PAYWALL LOGIKA
+const VALID_CODES = ["RESELL2026", "PAID4EUR", "VIP999", "PATRIK123"];
+
+function checkAuth() {
+    const isPaid = localStorage.getItem('resell_is_paid');
+    if (isPaid === 'true') {
+        document.getElementById('paywall-screen').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+    }
+}
+
+function verifyCode() {
+    const email = document.getElementById('input-email').value.trim();
+    const code = document.getElementById('input-code').value.trim();
+
+    if (!email || !code) {
+        alert("Vyplň prosím e-mail aj aktivačný kód!");
+        return;
+    }
+
+    if (VALID_CODES.includes(code)) {
+        localStorage.setItem('resell_is_paid', 'true');
+        alert("Kód overený! Vitaj v Resell OS v4.1.");
+        checkAuth();
+    } else {
+        alert("Neplatný aktivačný kód!");
+    }
+}
+
+// LOGIKA KALKULAČKY
 let items = [];
 let activeItemId = null;
 
@@ -245,22 +422,12 @@ function switchMainTab(tabId, btn) {
     btn.classList.add('active');
 }
 
-// MANAGEMENT PREDMETOV A KARIET (S KLONOVANÍM PREDCHÁDZAJÚCICH ÚDAJOV)
 function addNewItem() {
     const itemId = Date.now();
     const itemNumber = items.length + 1;
     
-    // Predvolené hodnoty
-    let template = {
-        price: 180,
-        currency: 'CNY',
-        category: 'clothing',
-        weight: 800,
-        sellPrice: 85,
-        addBox: true
-    };
+    let template = { price: 180, currency: 'CNY', category: 'clothing', weight: 800, sellPrice: 85, addBox: true };
     
-    // Ak už v zozname existuje predmet, skopírujeme údaje z posledného vytvoreného
     if (items.length > 0) {
         const lastItem = items[items.length - 1];
         template = {
@@ -273,12 +440,7 @@ function addNewItem() {
         };
     }
     
-    const newItem = {
-        id: itemId,
-        name: `Predmet #${itemNumber}`,
-        ...template
-    };
-    
+    const newItem = { id: itemId, name: `Predmet #${itemNumber}`, ...template };
     items.push(newItem);
     renderTabs();
     selectItem(itemId);
@@ -387,13 +549,10 @@ function updateItemData(itemId, field, value) {
     }
 }
 
-// VÝPOČTY
 function calcChina() {
     let totalProductEur = 0;
     let totalWeightGrams = 0;
     let totalPlannedSell = 0;
-    
-    // Sledovanie najprísnejšej kategórie (celý balík musí ísť cez najdrahšiu požadovanú linku)
     let maxCategoryMultiplier = 1.0;
     let hasSpecialLine = false;
 
@@ -409,13 +568,13 @@ function calcChina() {
         totalWeightGrams += w;
 
         if (item.category === 'perfume') {
-            if (maxCategoryMultiplier < 1.35) maxCategoryMultiplier = 1.35; // Parfémy / tekutiny vyžadujú najdrahšiu Liquid line (+35%)
+            if (maxCategoryMultiplier < 1.35) maxCategoryMultiplier = 1.35;
             hasSpecialLine = true;
         } else if (item.category === 'battery') {
-            if (maxCategoryMultiplier < 1.20) maxCategoryMultiplier = 1.20; // Batérie / elektronika (+20%)
+            if (maxCategoryMultiplier < 1.20) maxCategoryMultiplier = 1.20;
             hasSpecialLine = true;
         } else if (item.category === 'luxury') {
-            if (maxCategoryMultiplier < 1.15) maxCategoryMultiplier = 1.15; // Luxusný / High-Risk tovar (+15%)
+            if (maxCategoryMultiplier < 1.15) maxCategoryMultiplier = 1.15;
             hasSpecialLine = true;
         }
     });
@@ -432,7 +591,6 @@ function calcChina() {
     let countryRates = { SK: 13.8, CZ: 13.5, DE: 12.9, PL: 13.0, HU: 14.1 };
     let baseRate = countryRates[country] || 13.8;
     
-    // Započítanie prirážky podľa najprísnejšej kategórie v balíku
     let chinaShipEur = ((totalWeightGrams / 1000) * baseRate + 6.0) * maxCategoryMultiplier;
 
     let extraPackCost = 0;
@@ -501,6 +659,7 @@ function calcVinted() {
 }
 
 // INICIALIZÁCIA
+checkAuth();
 addNewItem();
 calcVinted();
 </script>
