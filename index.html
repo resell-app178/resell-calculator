@@ -82,6 +82,7 @@
             margin-bottom: 15px;
         }
 
+        /* ŽLTÝ NOTICE BOX */
         .notice-box {
             background-color: rgba(255, 170, 0, 0.15);
             border: 1px solid #ffaa00;
@@ -91,7 +92,7 @@
             font-size: 13px;
             text-align: left;
             line-height: 1.4;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .qr-container {
@@ -135,7 +136,7 @@
             background-color: #22d3ee;
         }
 
-        /* MAIN APP STYLES (PRIPOJENÉ) */
+        /* MAIN APP STYLES */
         #main-app {
             display: none;
         }
@@ -207,7 +208,7 @@
 
 <div class="wrapper">
 
-    <!-- 1. PAYWALL OBRAZOVKA (UZAMKNUTIE) -->
+    <!-- 1. PAYWALL OBRAZOVKA (ÚVODNÁ STRÁNKA) -->
     <div id="paywall-screen">
         <div class="paywall-container">
 
@@ -224,12 +225,13 @@
             </div>
 
             <div class="pw-card">
-                <div class="pw-title">Platba prevodom / QR kódom</div>
-                <div class="sub-text">Po zaplatení ti príde aktivačný kód na e-mail / do správy.</div>
-
+                <!-- ŽLTÉ UPOZORNENIE PRIAMO NAVRCHU PLATBY -->
                 <div class="notice-box">
                     ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem aktivačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
                 </div>
+
+                <div class="pw-title">Platba prevodom / QR kódom</div>
+                <div class="sub-text">Po zaplatení ti príde aktivačný kód na e-mail / do správy.</div>
 
                 <div class="iban-box">SK55 1100 0000 0029 7011 1093</div>
                 <div class="sub-text">Meno príjemcu: <b>Patrik Šuľaj</b></div>
@@ -249,7 +251,7 @@
         </div>
     </div>
 
-    <!-- 2. HLAVNÁ KALKULAČKA RESELL OS v4.1 -->
+    <!-- 2. HLAVNÁ KALKULAČKA (ZOSTÁVA SKRYTÁ, KÝM SA NEZADÁ KÓD) -->
     <div id="main-app">
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchMainTab('chinaTab', this)">1. Čína / Multi-Item Import</button>
