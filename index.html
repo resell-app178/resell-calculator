@@ -382,25 +382,72 @@
 
 </div>
 
-<script>
-// OVEROVANIE KÓDOV A TIME-BASED PAYWALL LOGIKA
-const MONTHLY_CODES = ["MONTH30", "RESELL2026", "VIP30", "PATRIK30"];
-const TEMP_24H_CODES = ["FREE24H", "DAY1FREE", "TESTER24"];
+<!-- FIREBASE INTEGRÁCIA -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyC4uUl6zjjycoNI04bJGUgnXZ_rqvv6aDU",
+    authDomain: "resell-calculator-383ce.firebaseapp.com",
+    databaseURL: "https://resell-calculator-383ce-default-rtdb.firebaseio.com",
+    projectId: "resell-calculator-383ce",
+    storageBucket: "resell-calculator-383ce.firebasestorage.app",
+    messagingSenderId: "235442585610",
+    appId: "1:235442585610:web:1e8721068de6cb123e1ff3",
+    measurementId: "G-QE7VWGMN5N"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Funkcia na overenie kódu z databázy
+  async function verifyCode() {
+      const email = document.getElementById('input-email').value.trim();
+      const code = document.getElementById('input-code').value.trim().toUpperCase();
+
+      if (!email || !code) {
+          alert("Vyplň prosím e-mail aj aktivačný kód!");
+          return;
+      }
+
+      try {
+          const codeRef = ref(db, 'codes/' + code);
+          const snapshot = await get(codeRef);
+
+          if (snapshot.exists()) {
+              const codeData = snapshot.val();
+
+              if (codeData.used) {
+                  alert("Tento kód už bol použitý na inom zariadení!");
+              } else {
+                  // Označí kód v databáze ako použitý -> nikto iný ho už nepoužije
+                  await update(codeRef, { used: true });
+
+                  // Uloží prístup do tohto konkrétneho prehliadača
+                  localStorage.setItem('resell_is_paid', 'true');
+                  
+                  alert("Kód bol úspešne aktivovaný! Kalkulačka je odomknutá.");
+                  unlockApp();
+              }
+          } else {
+              alert("Neplatný aktivačný kód!");
+          }
+      } catch (error) {
+          console.error("Chyba Firebase:", error);
+          alert("Chyba pripojenia k databáze! Skontroluj pripojenie na internet.");
+      }
+  }
+
+  // Sprístupnenie pre tlačidlo v HTML
+  window.verifyCode = verifyCode;
+</script>
+
+<script>
 function checkAuth() {
     const isPaid = localStorage.getItem('resell_is_paid');
-    const expiresAt = localStorage.getItem('resell_expires_at');
-
-    if (isPaid === 'true' && expiresAt) {
-        if (Date.now() < parseInt(expiresAt)) {
-            unlockApp();
-        } else {
-            // Prístup vypršal (či už 24h alebo 30 dní)
-            localStorage.removeItem('resell_is_paid');
-            localStorage.removeItem('resell_expires_at');
-            alert("Tvoj predplatený prístup vypršal! Obnov si predplatné zadaním nového kódu.");
-            lockApp();
-        }
+    if (isPaid === 'true') {
+        unlockApp();
     } else {
         lockApp();
     }
@@ -414,36 +461,6 @@ function unlockApp() {
 function lockApp() {
     document.getElementById('paywall-screen').style.display = 'flex';
     document.getElementById('main-app').style.display = 'none';
-}
-
-function verifyCode() {
-    const email = document.getElementById('input-email').value.trim();
-    const code = document.getElementById('input-code').value.trim().toUpperCase();
-
-    if (!email || !code) {
-        alert("Vyplň prosím e-mail aj aktivačný kód!");
-        return;
-    }
-
-    // 1. Skontrolujeme, či ide o MESAČNÝ KÓD (30 DNÍ)
-    if (MONTHLY_CODES.includes(code)) {
-        const expiresAt = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 dní odteraz
-        localStorage.setItem('resell_is_paid', 'true');
-        localStorage.setItem('resell_expires_at', expiresAt);
-        alert("Mesačné predplatné aktivované! Máš plný prístup na 30 dní.");
-        checkAuth();
-    } 
-    // 2. Skontrolujeme, či ide o 24-HODINOVÝ SKÚŠOBNÝ KÓD
-    else if (TEMP_24H_CODES.includes(code)) {
-        const expiresAt = Date.now() + (24 * 60 * 60 * 1000); // 24 hodín odteraz
-        localStorage.setItem('resell_is_paid', 'true');
-        localStorage.setItem('resell_expires_at', expiresAt);
-        alert("24-hodinový skúšobný kód aktivovaný! Máš prístup na 24 hodín.");
-        checkAuth();
-    } 
-    else {
-        alert("Neplatný aktivačný kód!");
-    }
 }
 
 // LOGIKA KALKULAČKY
