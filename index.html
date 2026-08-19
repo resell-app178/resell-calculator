@@ -225,7 +225,6 @@
             </div>
 
             <div class="pw-card">
-                <!-- ŽLTÝ NOTICE BOX PRIDANÝ PRESNE TU -->
                 <div class="notice-box">
                     ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem aktivačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
                 </div>
@@ -237,21 +236,21 @@
                 <div class="sub-text">Meno príjemcu: <b>Patrik Šuľaj</b></div>
 
                 <div class="qr-container">
-                    <img src="https://api.qrserver.com/v1/create-qr-/?size=180x180&data=SK5511000000002970111093" class="qr-img" alt="Platobný QR kód">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=SK5511000000002970111093" class="qr-img" alt="Platobný QR kód">
                 </div>
             </div>
 
             <div class="pw-card">
                 <div class="sub-text" style="text-align: left; margin-bottom: 8px;">Máš už kód? Zadaj svoj e-mail a aktivačný kód.</div>
                 <input type="email" id="input-email" class="pw-input" placeholder="Tvoj E-mail">
-                <input type="text" id="input-" class="pw-input" placeholder="Zadaj aktivačný kód">
-                <button class="pw-btn" onclick="verify()">ODOMKNÚŤ KALKULAČKU</button>
+                <input type="text" id="input-code" class="pw-input" placeholder="Zadaj aktivačný kód">
+                <button class="pw-btn" onclick="verifyCode()">ODOMKNÚŤ KALKULAČKU</button>
             </div>
 
         </div>
     </div>
 
-    <!-- 2. HLAVNÁ KALKULAČKA (ZOSTÁVA SKRYTÁ, KÝM SA NEZADÁ KÓD) -->
+    <!-- 2. HLAVNÁ KALKULAČKA -->
     <div id="main-app">
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchMainTab('chinaTab', this)">1. Čína / Multi-Item Import</button>
@@ -384,31 +383,71 @@
 </div>
 
 <script>
-// OVEROVANIE KÓDOV A PAYWALL LOGIKA
-const VALID_CODES = ["RESELL2026", "PAID4EUR", "VIP999", "PATRIK123"];
+// OVEROVANIE KÓDOV A TIME-BASED PAYWALL LOGIKA
+const LIFETIME_CODES = ["RESELL2026", "PAID4EUR", "VIP999", "PATRIK123"];
+const TEMP_24H_CODES = ["FREE24H", "DAY1FREE", "TESTER24"];
 
 function checkAuth() {
     const isPaid = localStorage.getItem('resell_is_paid');
+    const expiresAt = localStorage.getItem('resell_expires_at');
+
     if (isPaid === 'true') {
-        document.getElementById('paywall-screen').style.display = 'none';
-        document.getElementById('main-app').style.display = 'block';
+        // Ak má doživotný prístup
+        if (!expiresAt) {
+            unlockApp();
+            return;
+        }
+
+        // Ak má 24h prístup, skontrolujeme čas exspirácie
+        if (Date.now() < parseInt(expiresAt)) {
+            unlockApp();
+        } else {
+            // Prístup vypršal -> zamkneme appku
+            localStorage.removeItem('resell_is_paid');
+            localStorage.removeItem('resell_expires_at');
+            alert("Tvoj 24-hodinový skúšobný prístup vypršal!");
+            lockApp();
+        }
+    } else {
+        lockApp();
     }
+}
+
+function unlockApp() {
+    document.getElementById('paywall-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+}
+
+function lockApp() {
+    document.getElementById('paywall-screen').style.display = 'flex';
+    document.getElementById('main-app').style.display = 'none';
 }
 
 function verifyCode() {
     const email = document.getElementById('input-email').value.trim();
-    const code = document.getElementById('input-code').value.trim();
+    const code = document.getElementById('input-code').value.trim().toUpperCase();
 
     if (!email || !code) {
         alert("Vyplň prosím e-mail aj aktivačný kód!");
         return;
     }
 
-    if (VALID_CODES.includes(code)) {
+    // 1. Skontrolujeme, či ide o doživotný kód
+    if (LIFETIME_CODES.includes(code)) {
         localStorage.setItem('resell_is_paid', 'true');
-        alert("Kód overený! Vitaj v Resell OS v4.1.");
+        localStorage.removeItem('resell_expires_at'); // Doživotný prístup nemá exspiráciu
+        alert("Kód overený! Vítaj v Resell OS v4.1 (LIFETIME).");
         checkAuth();
-    } else {
+    } 
+    // 2. Skontrolujeme, či ide o 24-hodinový kód
+    else if (TEMP_24H_CODES.includes(code)) {
+        const expiresAt = Date.now() + (24 * 60 * 60 * 1000); // 24 hodín odteraz
+        localStorage.setItem('resell_is_paid', 'true');
+        localStorage.setItem('resell_expires_at', expiresAt);
+        alert("24-hodinový kód aktivovaný! Máš plný prístup na 24 hodín.");
+        checkAuth();
+    } 
+    else {
         alert("Neplatný aktivačný kód!");
     }
 }
