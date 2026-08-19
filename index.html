@@ -208,25 +208,25 @@
 
 <div class="wrapper">
 
-    <!-- 1. PAYWALL OBRAZOVKA (ÚVODNÁ STRÁNKA) -->
+    <!-- 1. PAYWALL OBRAZOVKA -->
     <div id="paywall-screen">
         <div class="paywall-container">
 
             <div class="pw-card">
                 <div class="pw-title">CENNÍK PRÍSTUPOV</div>
                 <div class="price-row">
-                    <span>Doživotný prístup (LIFETIME)</span>
-                    <span class="price">4.99 €</span>
+                    <span>Mesačné predplatné (30 DNÍ)</span>
+                    <span class="price">4.99 € / mes.</span>
                 </div>
                 <div class="price-row">
-                    <span>VIP Balík (Prístup + Discord)</span>
-                    <span class="price">9.99 €</span>
+                    <span>VIP Balík (30 Dní + Discord)</span>
+                    <span class="price">9.99 € / mes.</span>
                 </div>
             </div>
 
             <div class="pw-card">
                 <div class="notice-box">
-                    ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem aktivačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
+                    ⚠️ <b>DÔLEŽITÉ:</b> Pri odosielaní platby uveď do <b>poznámky pre príjemcu svoj E-mail</b>. Naň ti pošlem nový mesačný kód. Nezabudni skontrolovať aj priečinok <b>Spam</b>!
                 </div>
 
                 <div class="pw-title">Platba prevodom / QR kódom</div>
@@ -384,28 +384,21 @@
 
 <script>
 // OVEROVANIE KÓDOV A TIME-BASED PAYWALL LOGIKA
-const LIFETIME_CODES = ["RESELL2026", "PAID4EUR", "VIP999", "PATRIK123"];
+const MONTHLY_CODES = ["MONTH30", "RESELL2026", "VIP30", "PATRIK30"];
 const TEMP_24H_CODES = ["FREE24H", "DAY1FREE", "TESTER24"];
 
 function checkAuth() {
     const isPaid = localStorage.getItem('resell_is_paid');
     const expiresAt = localStorage.getItem('resell_expires_at');
 
-    if (isPaid === 'true') {
-        // Ak má doživotný prístup
-        if (!expiresAt) {
-            unlockApp();
-            return;
-        }
-
-        // Ak má 24h prístup, skontrolujeme čas exspirácie
+    if (isPaid === 'true' && expiresAt) {
         if (Date.now() < parseInt(expiresAt)) {
             unlockApp();
         } else {
-            // Prístup vypršal -> zamkneme appku
+            // Prístup vypršal (či už 24h alebo 30 dní)
             localStorage.removeItem('resell_is_paid');
             localStorage.removeItem('resell_expires_at');
-            alert("Tvoj 24-hodinový skúšobný prístup vypršal!");
+            alert("Tvoj predplatený prístup vypršal! Obnov si predplatné zadaním nového kódu.");
             lockApp();
         }
     } else {
@@ -432,19 +425,20 @@ function verifyCode() {
         return;
     }
 
-    // 1. Skontrolujeme, či ide o doživotný kód
-    if (LIFETIME_CODES.includes(code)) {
+    // 1. Skontrolujeme, či ide o MESAČNÝ KÓD (30 DNÍ)
+    if (MONTHLY_CODES.includes(code)) {
+        const expiresAt = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 dní odteraz
         localStorage.setItem('resell_is_paid', 'true');
-        localStorage.removeItem('resell_expires_at'); // Doživotný prístup nemá exspiráciu
-        alert("Kód overený! Vítaj v Resell OS v4.1 (LIFETIME).");
+        localStorage.setItem('resell_expires_at', expiresAt);
+        alert("Mesačné predplatné aktivované! Máš plný prístup na 30 dní.");
         checkAuth();
     } 
-    // 2. Skontrolujeme, či ide o 24-hodinový kód
+    // 2. Skontrolujeme, či ide o 24-HODINOVÝ SKÚŠOBNÝ KÓD
     else if (TEMP_24H_CODES.includes(code)) {
         const expiresAt = Date.now() + (24 * 60 * 60 * 1000); // 24 hodín odteraz
         localStorage.setItem('resell_is_paid', 'true');
         localStorage.setItem('resell_expires_at', expiresAt);
-        alert("24-hodinový kód aktivovaný! Máš plný prístup na 24 hodín.");
+        alert("24-hodinový skúšobný kód aktivovaný! Máš prístup na 24 hodín.");
         checkAuth();
     } 
     else {
